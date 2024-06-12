@@ -1,18 +1,28 @@
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
+import { useReadContract } from "wagmi";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "../contracts/constants";
 
 const TokenBalance: FC = () => {
   const [wallet, setWallet] = useState<string>(""); // the recipient address
-  const [balance, setBalance] = useState<number | undefined>();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const { isRefetching, data: balanceOfWallet } = useReadContract({
+    abi: CONTRACT_ABI,
+    address: CONTRACT_ADDRESS,
+    functionName: "balanceOf",
+    args: [wallet],
+  });
 
-  const getBalanceOfWallet = async () => {
-    setLoading(true);
-    setLoading(false);
-  };
+  const bal = useMemo(() => {
+    if (balanceOfWallet) {
+      const num = Number((balanceOfWallet as any) / BigInt(10 ** 18));
+      return num;
+    } else {
+      return undefined;
+    }
+  }, [balanceOfWallet]);
 
   return (
-    <div className="max-w-[400px] mx-auto pb-10">
+    <div className="pb-10">
       <h2 className="text-xl font-bold mb-2">Get Balance of Wallet</h2>
       <div className="">
         <input
@@ -24,16 +34,11 @@ const TokenBalance: FC = () => {
           onChange={(e) => setWallet(e.target.value)}
         />
       </div>
-      {balance && (
-        <p className="text-xl mt-3">{`Balance of ${wallet}: ${balance}`} </p>
+      {isRefetching ? (
+        <p className="text-lg mt-3">Fetching...</p>
+      ) : (
+        <>{bal && <p className="text-lg mt-3">{`Balance: ${bal}`} </p>}</>
       )}
-      <button
-        className="w-full mt-5 bg-black text-white h-10 disabled:opacity-70 hover:bg-black/80 disabled:pointer-events-none"
-        disabled={loading}
-        onClick={getBalanceOfWallet}
-      >
-        {loading ? "Fetching..." : "Get Balance"}
-      </button>
     </div>
   );
 };

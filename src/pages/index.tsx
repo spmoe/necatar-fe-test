@@ -7,7 +7,7 @@ import NAVManager from "../components/NAVManager";
 const Home: NextPage = () => {
   return (
     <Layouts>
-      <div className="py-10">
+      <div className="w-full px-4 sm:max-w-[400px] sm:mx-auto py-10">
         <TokenMinter />
         <TokenBalance />
         <NAVManager />

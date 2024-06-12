@@ -9,7 +9,9 @@ const Header: FC = () => {
       <div className="container mx-auto flex items-center justify-between p-4">
         <div className="">
           <Link href={"/"}>
-            <div className="uppercase text-xl font-bold">{TITLE}</div>
+            <div className="uppercase text-xl font-bold hidden sm:block">
+              {TITLE}
+            </div>
           </Link>
         </div>
         <div className="">

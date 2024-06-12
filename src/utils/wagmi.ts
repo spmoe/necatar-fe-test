@@ -1,6 +1,6 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { sepolia, mainnet } from "wagmi/chains";
-import { PROJECT_ID, TITLE } from "./config";
+import { PROJECT_ID, TITLE } from "../config";
 
 export const config = getDefaultConfig({
   appName: TITLE,
